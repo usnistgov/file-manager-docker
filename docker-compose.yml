@@ -6,20 +6,18 @@ services:
     restart: always
     ports:
       - 8443:443
-      - 8000:80
+      - 8090:8090
     volumes:
       - nextcloud-data:/var/www/html
-      - ./fm/default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
-      - ./fm/certs:/etc/ssl/private
     env_file:
       - ./fm/env/local.env
     depends_on:
       - mariadb
-  file-manager:
+  fm-app:
     build: ./fm/oar-fm-application-layer
     restart: always
     ports:
-      - 5000:5000
+      - 9093:9093
     volumes:
       - nextcloud-data:/shared
       - fm-data:/fm
@@ -29,6 +27,8 @@ services:
   mariadb:
     image: mariadb
     restart: always
+    ports:
+      - 3306:3306
     volumes:
       - db-data:/var/lib/mysql
     env_file:
